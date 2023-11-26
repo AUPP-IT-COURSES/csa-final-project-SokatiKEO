@@ -1,0 +1,1 @@
+canvas_2.itemconfig(card_title, text="Answer", fill="white")

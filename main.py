@@ -13,13 +13,7 @@ current_card = {}
 to_learn = {}
 
 # Load data from CSV file
-def check_data():
-    global to_learn
-    try:
-        data = pd.read_csv("data/words_to_learn.csv")
-        to_learn = data.to_dict(orient="records")
-    except FileNotFoundError:
-        mb.showerror("No data found", "No data found")
+
 
 # Set up the main window
 BACKGROUND_COLOR = "#E0F4FF"
@@ -43,6 +37,15 @@ back_img = PhotoImage(file="images/back.png")
 add_img = PhotoImage(file="images/add.png")
 
 # Functions for managing flashcards
+def check_data():
+    global to_learn
+    try:
+        data = pd.read_csv("data/words_to_learn.csv")
+        to_learn = data.to_dict(orient="records")
+    except FileNotFoundError:
+        mb.showerror("No data found", "No data found")
+        
+        
 def next_card():
     global current_card, flip_timer, canvas_2
     window.after_cancel(flip_timer)
@@ -55,13 +58,6 @@ def next_card():
         mb.showinfo("Out of questions", "Congratulations! You have learned all of the questions!")
         back()
 
-    flip_timer = window.after(30000, func=flip_card)
-
-def flip_card():
-    global canvas_2
-    canvas_2.itemconfig(card_title, text="Answer", fill="white")
-    canvas_2.itemconfig(card_word, text=current_card["Answer"], fill="white")
-    canvas_2.itemconfig(card_background, image=card_back_img)
 
 def flip_button_func():
     global canvas_2, flip_counter
@@ -77,6 +73,7 @@ def flip_button_func():
 
     flip_counter += 1
 
+
 def is_known():
     global to_learn
     to_learn.remove(current_card)
@@ -87,10 +84,8 @@ def is_known():
     data = pd.read_csv(csv_file_path)
     data = data[data['Question'] != current_card['Question']]
     data.to_csv(csv_file_path, index=False)
-
     next_card()
 
-flip_timer = window.after(30000, func=flip_card)
 
 def add():
     global to_learn
@@ -124,6 +119,8 @@ def add():
         mb.showinfo("Question updated", "Questions and Answers have been updated successfully")
         for entry in q_entry + a_entry:
             entry.delete(0, END)
+            
+            
 # Functions and setup for the second stage (back side of flashcards)
 def init_start():
     global card_background, card_title, card_word, canvas_2, back_frame
@@ -151,6 +148,7 @@ def init_start():
 
     next_card()
 
+
 def init_create():
     global card_background, card_title, card_word, canvas_2, back_frame, add_button
     back_frame = Frame(window, bg=BACKGROUND_COLOR)
@@ -167,11 +165,11 @@ def init_create():
     back_button = Button(back_frame, image=back_img, highlightthickness=0, command=back)
     back_button.place(x=0, y=0)
     for i in range(5):
-        q_text_box = Entry(back_frame)  # create a new textbox
+        q_text_box = Entry()  # create a new textbox
         q_text_box.place(x=160, y=75+(i*100), width=300, height=40)
         q_entry.append(q_text_box)
 
-        a_text_box = Entry(back_frame)  # create a new textbox
+        a_text_box = Entry()  # create a new textbox
         a_text_box.place(x=660, y=75+(i*100), width=300, height=40)
         a_entry.append(a_text_box)
 
@@ -180,6 +178,7 @@ def init_create():
 
         a_label = Label(back_frame, text=f"A{i+1}", font=("Ariel", 40, "italic"), bg="white")
         a_label.place(x=575, y=65+(i*100))
+
 
 # Functions for initializing the application
 def front_page_start():
@@ -206,6 +205,7 @@ def front_page_start():
     canvas.config(bg=BACKGROUND_COLOR, highlightthickness=0)
     canvas.grid(row=0, column=0, columnspan=3)
 
+
 def start():
     check_data()
     front_frame.destroy()
@@ -217,9 +217,11 @@ def start():
     else:
         init_start()
 
+
 def create():
     front_frame.destroy()
     init_create()
+
 
 def back():
     global back_frame, add_button
