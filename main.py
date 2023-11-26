@@ -114,8 +114,8 @@ def add():
                 writer.writeheader()
                 for key in q_and_a:
                     writer.writerow({'Question': key, 'Answer': q_and_a[key]})
-                data = pd.read_csv("data/words_to_learn.csv")
-                to_learn = data.to_dict(orient="records")
+            data = pd.read_csv("data/words_to_learn.csv")
+            to_learn = data.to_dict(orient="records")
         mb.showinfo("Question updated", "Questions and Answers have been updated successfully")
         for entry in q_entry + a_entry:
             entry.delete(0, END)
