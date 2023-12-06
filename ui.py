@@ -30,9 +30,6 @@ class FlashcardInterface:
         self.add_img = PhotoImage(file="images/add.png")
         
         
-
-        
-        
         self.front_page_start()
         self.window.mainloop()
         
@@ -61,13 +58,13 @@ class FlashcardInterface:
         self.flashcard.flip_counter += 1
         
     def add(self): 
-        empty_q = [q.get() for q in self.flashcard.q_entry if len(q.get()) != 0]
-        empty_a = [a.get() for a in self.flashcard.a_entry if len(a.get()) != 0]
+        question = [q.get() for q in self.flashcard.q_entry if len(q.get()) != 0]
+        answer = [a.get() for a in self.flashcard.a_entry if len(a.get()) != 0]
 
-        if not len(empty_q) == len(empty_a):
+        if not len(question) == len(answer):
             mb.showerror("Uneven question and answer", "Please input all the questions and answers")
         else:
-            q_and_a = {k: v for (k, v) in zip(empty_q, empty_a)}
+            q_and_a = {k: v for (k, v) in zip(question, answer)}
             df = pd.DataFrame(list(q_and_a.items()), columns=['Question', 'Answer'])
 
             # Update the existing CSV file
